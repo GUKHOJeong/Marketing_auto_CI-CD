@@ -102,7 +102,7 @@ graph TD
     FileType -- ".csv (Tabular)" --> Preprocessing
     Preprocessing --> DA_Start
     DA_End --> RG_Start
-    RG_End --> HumanFeedback{👤 Human Feedback<br>(Approve/Reject)}
+    RG_End --> HumanFeedback{"👤 Human Feedback<br>(Approve/Reject)"}
     
     HumanFeedback -- Reject --> DA_Start
     HumanFeedback -- Approve --> End((End))

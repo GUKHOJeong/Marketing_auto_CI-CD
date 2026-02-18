@@ -40,5 +40,10 @@ aiofiles               # 생성된 HTML/PPT 파일의 비동기 입출력 처리
 # --- LLM 관찰 및 모니터링 ---
 langfuse               # LLM 트레이싱 및 관찰 플랫폼 (LangSmith 대안)
 
+# --- PDF 생성 ---
+xhtml2pdf              # HTML to PDF 변환
+reportlab              # PDF 생성 및 폰트 등록
+
+
 
 setuptools #의존성문제 

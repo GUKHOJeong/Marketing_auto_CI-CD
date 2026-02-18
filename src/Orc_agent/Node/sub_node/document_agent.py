@@ -7,7 +7,7 @@ from langchain_core.runnables import RunnableConfig
 
 from src.Orc_agent.State.state import DocumentState
 from src.Orc_agent.core.llm_factory import LLMFactory
-from src.Orc_agent.core import observe, langfuse_session
+from src.Orc_agent.core.observe import langfuse_session, observe
 
 
 def _extract_pdf_via_gemini(file_path: str, session_id: str = "unknown") -> str:

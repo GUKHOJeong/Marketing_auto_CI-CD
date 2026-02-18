@@ -4,7 +4,7 @@ from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-from .observe import create_callback_handler, is_langfuse_enabled
+from src.Orc_agent.core.observe import create_callback_handler, is_langfuse_enabled
 
 
 class LLMFactory:

@@ -1,9 +1,9 @@
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
-from ..State.state import AgentState
-from ..Node import Main_node 
+from src.Orc_agent.State.state import AgentState
+from src.Orc_agent.Node import Main_node 
 from langgraph.graph import START
-from .sub_graph import analyze_data,document_agent,generate_report
+from src.Orc_agent.Graph.sub_graph import analyze_data,document_agent,generate_report
 
 def create_main_graph():
     share_memory=MemorySaver()

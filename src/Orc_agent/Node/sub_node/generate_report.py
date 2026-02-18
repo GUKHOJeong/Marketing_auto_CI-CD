@@ -7,10 +7,10 @@ from pptx import Presentation
 from pptx.util import Inches, Pt
 from xhtml2pdf import pisa
 
-from ...core.llm_factory import LLMFactory
-from ...core.observe import langfuse_session, observe
+from src.Orc_agent.core.llm_factory import LLMFactory
+from src.Orc_agent.core.observe import langfuse_session, observe
 from src.agent.prompt_engineering.prompts import REPORT_PROMPT
-from ...State.state import ReportState
+from src.Orc_agent.State.state import ReportState
 
 from src.Orc_agent.core.logger import logger
 

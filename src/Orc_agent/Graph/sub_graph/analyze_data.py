@@ -1,7 +1,7 @@
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
-from ...State.state import analyzeState
-from ...Node.sub_node import analyze_data
+from src.Orc_agent.State.state import analyzeState
+from src.Orc_agent.Node.sub_node import analyze_data
 from langgraph.graph import START
 
 def analyze_data_graph(CheckPoint=None):

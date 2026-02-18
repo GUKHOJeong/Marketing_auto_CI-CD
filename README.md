@@ -26,30 +26,99 @@ AI가 생성한 분석 차트와 인사이트의 예시입니다.
    - 예: *"월별 매출 추이를 보여줘"*, *"ROAS가 높은 광고 캠페인은 무엇이야?"*
 3. **분석 시작** 버튼을 클릭합니다.
 
-### 2. 🧠 멀티 에이전트 프로세스 (Workflow)
-시스템은 내부적으로 여러 AI 에이전트가 협업하여 결과를 도출합니다.
+### 2. 🧠 멀티 에이전트 프로세스 상세 (Detailed Workflow)
+시스템은 여러 전문 에이전트가 협업하여 작업을 수행합니다. 각 에이전트의 내부 구조는 다음과 같습니다.
 
 ```mermaid
 graph TD
-    User((User)) -->|Upload & Query| Start
-    Start --> Check{File Type}
+    %% Main Graph Nodes
+    Start((Start))
+    FileType{Check File Type}
+    Preprocessing[🧹 Preprocessing]
     
-    Check -->|Tabular Data| Preprocessing[🧹 Preprocessing]
-    Preprocessing --> Analysis[🤖 Analysis Agent]
-    
-    subgraph "AI Agent Loop"
-    Analysis -->|Plan| Planner[📝 Planner]
-    Planner -->|Code| Coder[💻 Code Generator]
-    Coder -->|Execute| Executor[⚙️ Executor]
-    Executor -->|Result| Inspector[🧐 Inspector]
-    Inspector -->|Refine| Analysis
+    %% Subgraphs
+    subgraph "Data Analysis Agent"
+        direction TB
+        DA_Start(Start)
+        Plan[📝 Plan Analysis]
+        Make[💻 Make Code]
+        Run[⚙️ Run Code]
+        Insight[💡 Derive Insight]
+        Eval{🧐 Eval / Verify}
+        DA_Wait{⏱️ Internal Wait/Route}
+        DA_End(Finish Sub-task)
+
+        DA_Start --> Plan
+        Plan --> Make
+        Make --> Run
+        Run -- Error --> Make
+        Run -- Success --> Insight
+        Insight --> Eval
+        Eval -- Reject --> Make
+        Eval -- Approve --> DA_Wait
+        DA_Wait -- Modify --> Make
+        DA_Wait -- Add --> Plan
+        DA_Wait -- Finish --> DA_End
     end
+
+    subgraph "Report Generation Agent"
+        direction TB
+        RG_Start(Start)
+        Supervisor{👮 Supervisor}
+        GenContent[📝 Generate Content]
+        GenPDF[📄 Create PDF]
+        GenHTML[🌐 Create HTML]
+        GenPPTX[📊 Create PPTX]
+        RG_End(Finish Report)
+
+        RG_Start --> Supervisor
+        Supervisor -- Generate Content --> GenContent
+        Supervisor -- Create PDF --> GenPDF
+        Supervisor -- Create HTML --> GenHTML
+        Supervisor -- Create PPTX --> GenPPTX
+        GenContent --> Supervisor
+        GenPDF --> Supervisor
+        GenHTML --> Supervisor
+        GenPPTX --> Supervisor
+        Supervisor -- FINISH --> RG_End
+    end
+
+    subgraph "Document Analysis Agent"
+        direction TB
+        Doc_Start(Start)
+        Read[📖 Read File]
+        AnalyzeDoc[🧠 Analyze Content]
+        Doc_End(Finish Analysis)
+
+        Doc_Start --> Read
+        Read --> AnalyzeDoc
+        AnalyzeDoc --> Doc_End
+    end
+
+    %% Main Graph Edges
+    Start --> FileType
     
-    Analysis -->|Insight| Report[📝 Report Generator]
-    Report --> HITL{👤 Human Review}
+    %% CSV Path
+    FileType -- ".csv (Tabular)" --> Preprocessing
+    Preprocessing --> DA_Start
+    DA_End --> RG_Start
+    RG_End --> HumanFeedback{👤 Human Feedback<br>(Approve/Reject)}
     
-    HITL -->|Approve| End((Finish))
-    HITL -->|Reject| Analysis
+    HumanFeedback -- Reject --> DA_Start
+    HumanFeedback -- Approve --> End((End))
+
+    %% Document Path
+    FileType -- ".pdf / .docx (Document)" --> Doc_Start
+    Doc_End --> End2((End))
+    
+    %% Styling
+    classDef agent fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000;
+    classDef decision fill:#fff9c4,stroke:#fbc02d,stroke-width:2px,color:#000;
+    classDef startend fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#000;
+    
+    class Preprocessing,Plan,Make,Run,Insight,Read,AnalyzeDoc,GenContent,GenPDF,GenHTML,GenPPTX agent;
+    class FileType,Eval,DA_Wait,Supervisor,HumanFeedback decision;
+    class Start,End,End2,DA_Start,DA_End,RG_Start,RG_End,Doc_Start,Doc_End startend;
 ```
 
 ### 3. 📈 시각화 및 리포트

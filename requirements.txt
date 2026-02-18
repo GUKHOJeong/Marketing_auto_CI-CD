@@ -1,8 +1,6 @@
-# --- 서버 및 API 프레임워크 ---
-fastapi[all]           # 비동기 웹 서버 및 데이터 검증
-uvicorn[standard]      # ASGI 서버 실행
+
 python-multipart       # 파일 업로드/폼 데이터 처리
-websockets             # 실시간 채팅 및 HITL 신호 전송용
+
 
 # --- 웹 UI ---
 streamlit              # 대화형 데이터 분석 웹앱

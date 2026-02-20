@@ -48,7 +48,7 @@ st.markdown("""
 
 # === 4. 세션 상태 초기화 ===
 def init_session():
-    if "session_id" not in st.session_state:
+    if "thread_id" not in st.session_state:
         st.session_state.thread_id = str(uuid.uuid4())
     if "uploaded_file_path" not in st.session_state:
         st.session_state.uploaded_file_path = None
@@ -241,7 +241,11 @@ def run_engine(log_container, graph_placeholder, user_query, report_format):
     analyze_app = sub_apps['analyze']
     
     config = {
-        "configurable": {"session_id": st.session_state.thread_id, "user_id": "streamlit_user"},
+        "configurable": {
+            "thread_id": st.session_state.thread_id,
+            "session_id": st.session_state.thread_id,
+            "user_id": "streamlit_user"
+        },
     }
     
     # Callback setup (Graph Placeholder 전달)
@@ -293,7 +297,9 @@ def run_engine(log_container, graph_placeholder, user_query, report_format):
         
         # Sub Agent의 상태 확인 (Analysis 노드 내부 Interrupt)
         sub_config = config.copy()
-        sub_config["configurable"]["session_id"] = f"{st.session_state.thread_id}_sub"
+        sub_thread = f"{st.session_state.thread_id}_sub"
+        sub_config["configurable"]["thread_id"] = sub_thread
+        sub_config["configurable"]["session_id"] = sub_thread
         sub_snapshot = analyze_app.get_state(sub_config)
         
         if sub_snapshot.next:
@@ -325,7 +331,9 @@ def run_engine(log_container, graph_placeholder, user_query, report_format):
              # 에러 발생 시에도 sub snapshot 확인 시도
              try:
                 sub_config = config.copy()
-                sub_config["configurable"]["session_id"] = f"{st.session_state.thread_id}_sub"
+                sub_thread = f"{st.session_state.thread_id}_sub"
+                sub_config["configurable"]["thread_id"] = sub_thread
+                sub_config["configurable"]["session_id"] = sub_thread
                 sub_snapshot = analyze_app.get_state(sub_config)
                 if hasattr(sub_snapshot, "values"):
                     st.session_state.hitl_snapshot = sub_snapshot.values
@@ -341,8 +349,12 @@ def handle_sub_feedback(action, text):
     _, sub_apps = get_graph()
     analyze_app = sub_apps['analyze']
     
+    sub_thread = f"{st.session_state.thread_id}_sub"
     sub_config = {
-        "configurable": {"session_id": f"{st.session_state.thread_id}_sub"}
+        "configurable": {
+            "thread_id": sub_thread,
+            "session_id": sub_thread
+        }
     }
     
     mapping = {"완료 (Approve)": "완료", "수정 (Modify)": "수정", "추가 (Add)": "추가"}
@@ -364,7 +376,10 @@ def handle_main_feedback(action, text):
     graph, _ = get_graph()
     
     config = {
-        "configurable": {"session_id": st.session_state.thread_id}
+        "configurable": {
+            "thread_id": st.session_state.thread_id,
+            "session_id": st.session_state.thread_id
+        }
     }
     
     val = "APPROVE" if "Approve" in action else "REJECT"

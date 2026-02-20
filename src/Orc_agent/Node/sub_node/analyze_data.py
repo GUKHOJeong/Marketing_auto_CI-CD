@@ -79,6 +79,7 @@ def make_analysis_code(state:analyzeState,config:RunnableConfig)-> analyzeState:
     img_dir = f"{current_dir}/img/{s_id}"
     if not os.path.exists(img_dir):
         os.makedirs(img_dir, exist_ok=True)
+    logger.info(f"이미지 저장 경로: {img_dir}")
     structured_llm = llm.with_structured_output(MakeCodeOutput)
     prompt = f"""
     분석 계획: {state['plan']}
@@ -194,6 +195,7 @@ def run_code(state:analyzeState, config: RunnableConfig)->analyzeState:
     img_dir = f"{current_dir}/img/{s_id}"
     if not os.path.exists(img_dir):
         os.makedirs(img_dir, exist_ok=True)
+
     target_pattern = f"{img_dir}/figure_{roop}_*.png"
     target_csv = f"{img_dir}/*.csv"
     for f in glob.glob(target_pattern):

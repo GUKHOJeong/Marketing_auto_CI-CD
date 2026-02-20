@@ -43,12 +43,16 @@ def analysis(sub_app):
     @observe(name="analysis")
     def analysis_node(state: AgentState, config: RunnableConfig):
         logger.info(f">>> [분석 노드] 서브그래프 상태 확인 중...")
+        logger.info(f">>> [분석 노드] Validating Config Keys: {list(config.get('configurable', {}).keys())}")
         parent_thread_id = config["configurable"].get("thread_id")
+        parent_session_id = config["configurable"].get("session_id")
+        logger.info(f">>> [분석 노드] Parent Thread ID: {parent_thread_id}, Session ID: {parent_session_id}")
+        
         sub_thread_id = f"{parent_thread_id}_sub"
         sub_config = config.copy()
         sub_config["configurable"] = {
             "thread_id": sub_thread_id,
-            "session_id": parent_thread_id, 
+            "session_id": parent_session_id if parent_session_id else parent_thread_id,
             "user_id": config["configurable"].get("user_id")
         }
 

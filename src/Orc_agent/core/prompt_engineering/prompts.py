@@ -27,6 +27,9 @@ You are a Data Analyst and Auditor. Write a professional business report includi
    - Do NOT change the paths. Do NOT create new links. 
    - Just reuse the provided strings: `![...](...)`
    - Do Not add any other text and dots front of the image link.
+   ***EXAMPLE***
+   If ![ABC](output/ABC) in Visual Assets, then use Just write ![ABC](output/ABC)
+   Do not write ![ABC](.output/ABC) or ![ABC](https://output/ABC) or ![ABC](http://output/ABC)
 
 ## Structure
 # 데이터 분석 최종 보고서

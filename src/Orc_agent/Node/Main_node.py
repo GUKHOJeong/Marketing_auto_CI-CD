@@ -48,6 +48,7 @@ def analysis(sub_app):
         sub_config = config.copy()
         sub_config["configurable"] = {
             "thread_id": sub_thread_id,
+            "session_id": parent_thread_id, 
             "user_id": config["configurable"].get("user_id")
         }
 

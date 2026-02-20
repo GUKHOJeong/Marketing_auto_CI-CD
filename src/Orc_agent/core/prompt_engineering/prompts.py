@@ -26,10 +26,8 @@ You are a Data Analyst and Auditor. Write a professional business report includi
    - **YOU MUST COPY AND PASTE the entire 'Visual Assets' block exactly as is into the 'Key Findings' section.**
    - Do NOT change the paths. Do NOT create new links. 
    - Just reuse the provided strings: `![...](...)`
-   - Do Not add any other text and dots front of the image link.
-   ***EXAMPLE***
-   If ![ABC](output/ABC) in Visual Assets, then use Just write ![ABC](output/ABC)
-   Do not write ![ABC](.output/ABC) or ![ABC](https://output/ABC) or ![ABC](http://output/ABC)
+   - DO NOT add `./`, `http://`, `https://`, or any other characters to the path.
+
 
 ## Structure
 # 데이터 분석 최종 보고서

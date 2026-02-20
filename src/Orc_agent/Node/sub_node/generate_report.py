@@ -171,9 +171,11 @@ def _fix_hallucinated_paths(content: str, figure_list: list) -> str:
         # 2. Markdown 내의 파일명(Placeholder)을 Base64 URI로 치환
         # LLM이 ![Description](figure_0_0.png) 형태로 작성했다고 가정
         
+        
         safe_name = re.escape(filename)
-        # Pattern: ( ... filename )
-        pattern = r'\([^\)]*' + safe_name + r'\)'
+        # Pattern: ( ... filename ... )
+        # 괄호 안에서 filename이 포함된 모든 문자열을 찾아 Base64로 교체
+        pattern = r'\([^\)]*?' + safe_name + r'.*?\)'
         
         content = re.sub(pattern, f"({base64_src})", content)
         

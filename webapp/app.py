@@ -241,7 +241,7 @@ def run_engine(log_container, graph_placeholder, user_query, report_format):
     analyze_app = sub_apps['analyze']
     
     config = {
-        "configurable": {"thread_id": st.session_state.thread_id, "user_id": "streamlit_user"},
+        "configurable": {"session_id": st.session_state.thread_id, "user_id": "streamlit_user"},
     }
     
     # Callback setup (Graph Placeholder 전달)
@@ -293,7 +293,7 @@ def run_engine(log_container, graph_placeholder, user_query, report_format):
         
         # Sub Agent의 상태 확인 (Analysis 노드 내부 Interrupt)
         sub_config = config.copy()
-        sub_config["configurable"]["thread_id"] = f"{st.session_state.thread_id}_sub"
+        sub_config["configurable"]["session_id"] = f"{st.session_state.thread_id}_sub"
         sub_snapshot = analyze_app.get_state(sub_config)
         
         if sub_snapshot.next:
@@ -325,7 +325,7 @@ def run_engine(log_container, graph_placeholder, user_query, report_format):
              # 에러 발생 시에도 sub snapshot 확인 시도
              try:
                 sub_config = config.copy()
-                sub_config["configurable"]["thread_id"] = f"{st.session_state.thread_id}_sub"
+                sub_config["configurable"]["session_id"] = f"{st.session_state.thread_id}_sub"
                 sub_snapshot = analyze_app.get_state(sub_config)
                 if hasattr(sub_snapshot, "values"):
                     st.session_state.hitl_snapshot = sub_snapshot.values
@@ -342,7 +342,7 @@ def handle_sub_feedback(action, text):
     analyze_app = sub_apps['analyze']
     
     sub_config = {
-        "configurable": {"thread_id": f"{st.session_state.thread_id}_sub"}
+        "configurable": {"session_id": f"{st.session_state.thread_id}_sub"}
     }
     
     mapping = {"완료 (Approve)": "완료", "수정 (Modify)": "수정", "추가 (Add)": "추가"}
@@ -364,7 +364,7 @@ def handle_main_feedback(action, text):
     graph, _ = get_graph()
     
     config = {
-        "configurable": {"thread_id": st.session_state.thread_id}
+        "configurable": {"session_id": st.session_state.thread_id}
     }
     
     val = "APPROVE" if "Approve" in action else "REJECT"

@@ -21,7 +21,10 @@ You are a Data Analyst and Auditor. Write a professional business report includi
 2. Use Markdown.
 3. **Audit Section**: Include a summary of technical quality, potential biases, and data integrity based on the analysis.
 4. **Key Insights**: Highlight top business-relevant findings.
-5. **Visuals**: Embed the provided figure links in the report.
+5. **Visuals**: You MUST use the EXACT image paths provided in the 'Visual Assets' section above. 
+   - Do NOT create fake links (e.g., 'example.com', '#').
+   - Do NOT ignore the provided paths.
+   - Insert the images using the format: `![Description](EXACT_PATH_FROM_ABOVE)`
 
 ## Structure
 # 데이터 분석 최종 보고서

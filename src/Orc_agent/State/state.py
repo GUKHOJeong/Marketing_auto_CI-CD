@@ -3,6 +3,8 @@ import operator
 import pandas as pd
 
 def merge_logs(left: List[str], right: List[str]) -> List[str]:
+    if right == ["RESET"]:
+        return []
     if right is None:
         return left
     if left is None:
@@ -12,6 +14,8 @@ def merge_logs(left: List[str], right: List[str]) -> List[str]:
 def merge_dicts(left: Dict[str, Any], right: Dict[str, Any]) -> Dict[str, Any]:
     if right is None:
         return left
+    if right.get("RESET"):
+        return {}
     if left is None:
         return right
     return {**left, **right}
@@ -27,7 +31,7 @@ class analyzeState(TypedDict):
     roop_back: int
     plan:str
     df_summary:str
-    error_roop: Annotated[int, operator.add]
+    error_roop: int
     is_approved:bool
     final_insight: Annotated[Dict[str, Any], merge_dicts]
     user_query : str
@@ -69,7 +73,7 @@ class AgentState(TypedDict):
     file_type: Optional[Literal["tabular", "document"]]
     raw_data: Optional[dict]
     
-
+    
     user_query: Optional[str]
     
     # Processed data

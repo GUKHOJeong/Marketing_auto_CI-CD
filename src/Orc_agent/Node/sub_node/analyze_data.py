@@ -174,8 +174,10 @@ print(f"사용 중인 한글 폰트: {{korean_font}}")
         code = header + "\n" + code
     except Exception as e:
         return {"now_log": [f"Code Generation Failed: {str(e)}"], "error_roop": state.get("error_roop", 0) + 1}
-        
-    return {"code": code}
+    if state.get("user_choice")=="수정":
+        return {"code": code,"result_img_paths": ["RESET"],"final_insight": {"RESET": True}}
+    else:
+        return {"code": code}
 
 @observe(name="Run")
 def run_code(state:analyzeState, config: RunnableConfig)->analyzeState:
@@ -205,9 +207,7 @@ def run_code(state:analyzeState, config: RunnableConfig)->analyzeState:
         result = executor_instance.run(code)
         
         logger.info(f"실행 결과: {result[:500]}")
-        
-        # Traceback이 포함되어 있으면 에러로 간주
-        if "Traceback" in result or "Error" in result:
+        if "Traceback" in result:
              return {
                 "now_log": [result], 
                 "error_roop": state.get("error_roop",0) + 1
@@ -216,7 +216,7 @@ def run_code(state:analyzeState, config: RunnableConfig)->analyzeState:
         # 생성된 이미지 파일 확인
         img_paths = sorted(glob.glob(target_pattern))
         
-        return {"result_summary": result, "result_img_paths": img_paths,"now_log":None,"error_roop": 0}
+        return {"result_summary": result, "result_img_paths": img_paths,"now_log":["RESET"],"error_roop": 0}
     except Exception as e:
         return {
             "now_log": [str(e)], 

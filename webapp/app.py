@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 load_dotenv(dotenv_path=project_root / ".env")
-
+import base64
 import streamlit as st
 import pandas as pd
 import uuid

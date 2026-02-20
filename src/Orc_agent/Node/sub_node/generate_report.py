@@ -13,6 +13,7 @@ from src.Orc_agent.core.prompt_engineering.prompts import REPORT_PROMPT
 from src.Orc_agent.State.state import ReportState
 
 from src.Orc_agent.core.logger import logger
+import base64
 
 # Ensure output directory exists
 OUTPUT_DIR = "output"
@@ -91,13 +92,16 @@ def generate_content(state: ReportState) -> ReportState:
 - Columns: {len(df.columns)}
 - Column List: {', '.join(df.columns)}
 """
-        
+            
+
         # Visualization Context
         figure_markdown = ""
         if figure_list:
             figure_markdown = "### Key Visualizations\n"
             for fig in figure_list:
-                figure_markdown += f"![{fig}]({fig})\n"
+                with open(fig, "rb") as img_file:
+                    encoded_string = base64.b64encode(img_file.read()).decode()
+                    figure_markdown += f"![{fig}](data:image/png;base64,{encoded_string})\n"
         
         all_results = "\n\n---\n\n".join(analysis_results)
         

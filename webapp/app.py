@@ -48,7 +48,7 @@ st.markdown("""
 
 # === 4. 세션 상태 초기화 ===
 def init_session():
-    if "thread_id" not in st.session_state:
+    if "session_id" not in st.session_state:
         st.session_state.thread_id = str(uuid.uuid4())
     if "uploaded_file_path" not in st.session_state:
         st.session_state.uploaded_file_path = None

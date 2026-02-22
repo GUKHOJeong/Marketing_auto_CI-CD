@@ -192,7 +192,7 @@ def main():
 
         with tab3:
             if st.session_state.final_report:
-                render_markdown_with_images(st.session_state.final_report)
+                st.markdown(st.session_state.final_report, unsafe_allow_html=True)
             elif st.session_state.analysis_results:
                 st.info("최종 보고서가 아직 생성되지 않았습니다.")
             else:
@@ -204,35 +204,35 @@ def main():
         run_engine(log_container, graph_placeholder, user_query, report_format)
 
 
-def render_markdown_with_images(markdown_text):
-    """
-    Markdown 텍스트 내의 로컬 이미지 경로를 파싱하여 st.image로 렌더링
-    Format: ![alt](path)
-    """
-    import re
+# def render_markdown_with_images(markdown_text):
+#     """
+#     Markdown 텍스트 내의 로컬 이미지 경로를 파싱하여 st.image로 렌더링
+#     Format: ![alt](path)
+#     """
+#     import re
     
-    # 이미지 패턴 찾기: ![alt](path)
-    pattern = r'!\[(.*?)\]\((.*?)\)'
-    parts = re.split(pattern, markdown_text)
+#     # 이미지 패턴 찾기: ![alt](path)
+#     pattern = r'!\[(.*?)\]\((.*?)\)'
+#     parts = re.split(pattern, markdown_text)
     
-    # parts 구조: [text, alt, path, text, alt, path, ...]
-    # len(parts)는 1 (이미지 없음) 또는 1 + 3*N (N개 이미지)
+#     # parts 구조: [text, alt, path, text, alt, path, ...]
+#     # len(parts)는 1 (이미지 없음) 또는 1 + 3*N (N개 이미지)
     
-    for i in range(0, len(parts), 3):
-        text_segment = parts[i]
-        if text_segment.strip():
-            st.markdown(text_segment)
+#     for i in range(0, len(parts), 3):
+#         text_segment = parts[i]
+#         if text_segment.strip():
+#             st.markdown(text_segment)
         
-        if i + 2 < len(parts):
-            alt_text = parts[i+1]
-            img_path = parts[i+2]
+#         if i + 2 < len(parts):
+#             alt_text = parts[i+1]
+#             img_path = parts[i+2]
             
-            # 이미지 경로 정리 (절대 경로 -> 상대 경로 시도 또는 그대로 사용)
-            # Streamlit은 st.image에 로컬 절대 경로를 허용함
-            if os.path.exists(img_path):
-                st.image(img_path, caption=alt_text)
-            else:
-                st.warning(f"이미지를 찾을 수 없습니다: {img_path}")
+#             # 이미지 경로 정리 (절대 경로 -> 상대 경로 시도 또는 그대로 사용)
+#             # Streamlit은 st.image에 로컬 절대 경로를 허용함
+#             if os.path.exists(img_path):
+#                 st.image(img_path, caption=alt_text)
+#             else:
+#                 st.warning(f"이미지를 찾을 수 없습니다: {img_path}")
 
 
 # === 7. 실행 엔진 ===

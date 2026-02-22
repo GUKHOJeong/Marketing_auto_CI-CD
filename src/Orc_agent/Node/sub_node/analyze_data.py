@@ -301,7 +301,7 @@ def derive_insight_node(state: analyzeState, config: RunnableConfig):
     import os
     img_paths = []
     current_dir = os.getcwd().replace("\\", "/")
-    img_dir = f"{current_dir}/img/{s_id}"
+    img_dir = f"webapp/static/img/{s_id}"
     
     plan = state.get("plan", "")
     df_summary = state.get("df_summary", "")

@@ -95,11 +95,17 @@ def generate_content(state: ReportState) -> ReportState:
             
 
         # Visualization Context
+        # Streamlit Cloud enableStaticServing: webapp/static/img/... -> /app/static/img/...
         figure_markdown = ""
         if figure_list:
-            figure_markdown = "### Key Visualizations "
+            figure_markdown = "### 시각화 자료 (아래 마크다운 링크를 보고서의 적절한 위치에 복사해서 사용하세요)\n"
             for fig in figure_list:
-                figure_markdown += f"![{fig}]({fig[3:]})\n"
+                # fig: 'webapp/static/img/{s_id}/figure.png'
+                # Cloud URL: '/app/static/img/{s_id}/figure.png'
+                web_path = fig.replace("webapp/static/", "/app/static/")
+                if not web_path.startswith("/"): web_path = "/" + web_path
+                
+                figure_markdown += f"![시각화]({web_path})\n"
         
         all_results = "\n\n---\n\n".join(analysis_results)
         
@@ -112,7 +118,7 @@ def generate_content(state: ReportState) -> ReportState:
         with langfuse_session(session_id="generate-report", tags=["generate_report"]):
             response = llm.invoke(prompt, config={"callbacks": callbacks})
         
-        # Handle DummyLLM response
+        # Handle response
         if hasattr(response, 'content'):
             content = response.content
         else:
@@ -123,14 +129,7 @@ def generate_content(state: ReportState) -> ReportState:
             
         return {
             "final_report": content,
-            "steps_log": ["[Report] Generated Markdown content via LLM"]
-        }
-
-
-
-        return {
-            "final_report": content,
-            "steps_log": ["[Report] Generated Markdown content via LLM"]
+            "steps_log": ["[Report] Generated Markdown content via LLM with correct static URLs"]
         }
 
     except Exception as e:

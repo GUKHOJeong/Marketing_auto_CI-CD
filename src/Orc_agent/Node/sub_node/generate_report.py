@@ -99,7 +99,7 @@ def generate_content(state: ReportState) -> ReportState:
         if figure_list:
             figure_markdown = "### Key Visualizations "
             for fig in figure_list:
-                figure_markdown += f"![{fig}](app/{fig})\n"
+                figure_markdown += f"![{fig}]({fig[3:]})\n"
         
         all_results = "\n\n---\n\n".join(analysis_results)
         

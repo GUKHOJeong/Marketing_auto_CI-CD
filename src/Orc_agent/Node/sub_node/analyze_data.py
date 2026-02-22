@@ -76,7 +76,7 @@ def make_analysis_code(state:analyzeState,config:RunnableConfig)-> analyzeState:
         file_path = ""
     current_dir = os.getcwd().replace("\\", "/") 
     # [Fix] Use session_id for isolation
-    img_dir = f"{current_dir}/img/{s_id}"
+    img_dir = f"static/img/{s_id}"
     if not os.path.exists(img_dir):
         os.makedirs(img_dir, exist_ok=True)
     logger.info(f"이미지 저장 경로: {img_dir}")
@@ -192,7 +192,7 @@ def run_code(state:analyzeState, config: RunnableConfig)->analyzeState:
     import os
     
     current_dir = os.getcwd().replace("\\", "/")
-    img_dir = f"{current_dir}/img/{s_id}"
+    img_dir = f"static/img/{s_id}"
     if not os.path.exists(img_dir):
         os.makedirs(img_dir, exist_ok=True)
 

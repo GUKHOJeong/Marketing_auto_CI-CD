@@ -97,11 +97,9 @@ def generate_content(state: ReportState) -> ReportState:
         # Visualization Context
         figure_markdown = ""
         if figure_list:
-            figure_markdown = "### Key Visualizations (Use these filenames exactly)\n"
+            figure_markdown = "### Key Visualizations "
             for fig in figure_list:
-                filename = os.path.basename(fig)
-                # LLM에게는 파일명만 보여주고, 나중에 Base64로 치환
-                figure_markdown += f"- {filename}\n"
+                figure_markdown += f"![{fig}](app/{fig})\n"
         
         all_results = "\n\n---\n\n".join(analysis_results)
         
@@ -129,8 +127,6 @@ def generate_content(state: ReportState) -> ReportState:
         }
 
 
-        # 4. Post-processing: Fix hallucinated image paths
-        content = _fix_hallucinated_paths(content, figure_list)
 
         return {
             "final_report": content,
@@ -144,42 +140,7 @@ def generate_content(state: ReportState) -> ReportState:
             "steps_log": [f"[Report] ERROR: {str(e)}"]
         }
 
-def _fix_hallucinated_paths(content: str, figure_list: list) -> str:
-    """
-    LLM이 생성한 마크다운의 파일명(placeholder)을 Base64 데이터 URI로 치환
-    STREAMLIT 호환성: 로컬 경로 대신 Base64 문자열을 직접 임베딩
-    """
-    if not content or not figure_list:
-        return content
-        
-    import re
-    import base64
-    
-    for fig_path in figure_list:
-        filename = os.path.basename(fig_path)
-        if not filename: continue
-        
-        # 1. 이미지 파일 읽어서 Base64 변환
-        try:
-            with open(fig_path, "rb") as image_file:
-                encoded_string = base64.b64encode(image_file.read()).decode()
-                base64_src = f"data:image/png;base64,{encoded_string}"
-        except Exception as e:
-            logger.error(f"이미지 읽기 실패 ({fig_path}): {e}")
-            continue
 
-        # 2. Markdown 내의 파일명(Placeholder)을 Base64 URI로 치환
-        # LLM이 ![Description](figure_0_0.png) 형태로 작성했다고 가정
-        
-        
-        safe_name = re.escape(filename)
-        # Pattern: ( ... filename ... )
-        # 괄호 안에서 filename이 포함된 모든 문자열을 찾아 Base64로 교체
-        pattern = r'\([^\)]*?' + safe_name + r'.*?\)'
-        
-        content = re.sub(pattern, f"({base64_src})", content)
-        
-    return content
 
 @observe(name="create_pdf")
 def create_pdf(state: ReportState) -> ReportState:

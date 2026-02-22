@@ -364,9 +364,18 @@ def derive_insight_node(state: analyzeState, config: RunnableConfig):
         }
         
         for item in response.image_specific_insights:
-            full_path = filename_map.get(item.img_name, None)
+            item_basename = os.path.basename(item.img_name)
+            full_path = filename_map.get(item_basename, None)
             
-            final_insight[item.img_name] = {
+            # fallback: find by partial match
+            if not full_path:
+                for k, v in filename_map.items():
+                    if item_basename in k or k in item_basename:
+                        item_basename = k
+                        full_path = v
+                        break
+            
+            final_insight[item_basename] = {
                 "insight": item.insight,
                 "img_path": full_path
             }
